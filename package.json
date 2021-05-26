@@ -1,0 +1,28 @@
+{
+  "name": "alura-nodejs-api-rest-padronizada-escalavel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/naimaier/alura-nodejs-api-rest-padronizada-escalavel.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/naimaier/alura-nodejs-api-rest-padronizada-escalavel/issues"
+  },
+  "homepage": "https://github.com/naimaier/alura-nodejs-api-rest-padronizada-escalavel#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "config": "^3.3.6",
+    "express": "^4.17.1",
+    "jsontoxml": "^1.0.1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.6.2"
+  }
+}
