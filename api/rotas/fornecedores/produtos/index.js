@@ -21,4 +21,18 @@ roteador.post('/', async (request, response) => {
     response.send(produto)
 })
 
+roteador.delete('/:id', async (request, response) => {
+    const dados = {
+        id: request.params.id,
+        fornecedor: request.params.idFornecedor
+    }
+
+    const produto = new Produto(dados)
+
+    await produto.apagar()
+
+    response.status(204)
+    response.end()
+})
+
 module.exports = roteador
