@@ -44,6 +44,17 @@ class Produto {
     apagar() {
         return Tabela.remover(this.id, this.fornecedor)
     }
+
+    async carregar() {
+        const resultado = await Tabela.buscarPorId(this.id, this.fornecedor)
+
+        this.titulo = resultado.titulo
+        this.preco = resultado.preco
+        this.estoque = resultado.estoque
+        this.dataCriacao = resultado.dataCriacao
+        this.dataAtualizacao = resultado.dataAtualizacao
+        this.versao = resultado.versao
+    }
 }
 
 module.exports = Produto
