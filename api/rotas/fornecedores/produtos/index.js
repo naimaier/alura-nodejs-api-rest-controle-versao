@@ -73,4 +73,25 @@ roteador.get('/:id', async (request, response, proximo) => {
     }
 })
 
+roteador.put('/:id', async(request, response, proximo) => {
+    try {
+        const dados = Object.assign(
+            {},
+            request.body,
+            {
+                id: request.params.id,
+                fornecedor: request.fornecedor.id
+            }
+        )
+    
+        const produto = new Produto(dados)
+        await produto.atualizar()
+
+        response.status(204)
+        response.end()
+    } catch(erro) {
+        proximo(erro)
+    }
+})
+
 module.exports = roteador
