@@ -3,11 +3,16 @@ const roteador = require('express').Router({ mergeParams: true })
 // para acessar o idFornecedor presente em rotas/fornecedores/index.js
 const Tabela = require('./TabelaProduto')
 const Produto = require('./Produto')
+const Serializador = require('../../../Serializador').SerializadorProduto
 
 roteador.get('/', async (request, response) => {
     const produtos = await Tabela.listar(request.fornecedor.id)
+    const serializador = new Serializador(
+        response.getHeader('Content-Type')
+    )
+
     response.send(
-        JSON.stringify(produtos)
+        serializador.serializar(produtos)
     )
 })
 
@@ -18,8 +23,14 @@ roteador.post('/', async (request, response, proximo) => {
         const dados = Object.assign({}, corpo, { fornecedor: idFornecedor })
         const produto = new Produto(dados)
         await produto.criar()
+
+        const serializador = new Serializador(
+            response.getHeader('Content-Type')
+        )
         response.status(201)
-        response.send(produto)
+        response.send(
+            serializador.serializar(produto)
+        )
     } catch (erro) {
         proximo(erro)
     }
@@ -49,8 +60,13 @@ roteador.get('/:id', async (request, response, proximo) => {
         const produto = new Produto(dados)
         await produto.carregar()
     
+        const serializador = new Serializador(
+            response.getHeader('Content-Type'),
+            ['preco', 'estoque', 'fornecedor', 'dataCriacao', 
+            'dataAtualizacao', 'versao']
+        )
         response.send(
-            JSON.stringify(produto)
+            serializador.serializar(produto)
         )
     } catch (erro) {
         proximo(erro)
