@@ -94,4 +94,24 @@ roteador.put('/:id', async(request, response, proximo) => {
     }
 })
 
+// Para adicionar um comportamento à nossa API, usaremos o método POST
+// Criamos a rota com o verbo da ação do comportamento
+roteador.post('/:id/diminuir-estoque', async(request, response, proximo) => {
+    try {
+        const produto = new Produto({
+            id: request.params.id,
+            fornecedor: request.fornecedor.id
+        })
+        await produto.carregar()
+
+        produto.estoque = produto.estoque - request.body.quantidade
+        await produto.diminuirEstoque()
+
+        response.status(204)
+        response.end()
+    } catch(erro) {
+        proximo(erro)
+    }
+})
+
 module.exports = roteador
