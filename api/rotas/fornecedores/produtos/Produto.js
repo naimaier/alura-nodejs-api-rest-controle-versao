@@ -1,4 +1,6 @@
 const Tabela = require('./TabelaProduto')
+const DadosNaoFornecidos = require('../../../erros/DadosNaoFornecidos')
+const CampoInvalido = require('../../../erros/CampoInvalido')
 
 class Produto {
     constructor({ id, titulo, preco, estoque, fornecedor, dataCriacao, 
@@ -15,11 +17,11 @@ class Produto {
 
     validar() {
         if (typeof this.titulo !== 'string' || this.titulo.length === 0) {
-            throw new Error('O campo título está inválido')
+            throw new CampoInvalido('titulo')
         }
 
         if (typeof this.preco !== 'number' || this.preco === 0) {
-            throw new Error('O campo preço está inválido')
+            throw new CampoInvalido('preco')
         }
         // Na tabela está double
         // No javascript, independente de ser ponto flutuante, usamos 'number'
@@ -72,7 +74,7 @@ class Produto {
         }
 
         if (Object.keys(dadosParaAtualizar).length === 0) {
-            throw new Error('Não foram fornecidos dados para atualizar')
+            throw new DadosNaoFornecidos()
         }
 
         return Tabela.atualizar({
