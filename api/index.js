@@ -30,6 +30,12 @@ app.use((request, response, proximo) => {
     // Chamamos a execução do próximo middleware
 })
 
+// Middleware para habilitar o CORS
+app.use((request, response, proximo) => {
+    response.set('Access-Control-Allow-Origin', '*')
+    proximo()
+})
+
 const roteador = require('./rotas/fornecedores')
 app.use('/api/fornecedores', roteador)
 
