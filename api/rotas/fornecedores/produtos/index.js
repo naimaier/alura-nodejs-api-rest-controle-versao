@@ -27,6 +27,13 @@ roteador.post('/', async (request, response, proximo) => {
         const serializador = new Serializador(
             response.getHeader('Content-Type')
         )
+        response.set('ETag', produto.versao)
+        // Versao do registro no db
+        const timestamp = (new Date(produto.dataAtualizacao)).getTime()
+        // Transformando o objeto date em timestamp
+        response.set('Last-Modified', timestamp)
+        response.set('Location', `/api/fornecedores/${produto.fornecedor}/produtos/${produto.id}`)
+        // Local onde podem ser acessadas mais informações sobre o item
         response.status(201)
         response.send(
             serializador.serializar(produto)
@@ -65,6 +72,10 @@ roteador.get('/:id', async (request, response, proximo) => {
             ['preco', 'estoque', 'fornecedor', 'dataCriacao', 
             'dataAtualizacao', 'versao']
         )
+        response.set('ETag', produto.versao)
+        const timestamp = (new Date(produto.dataAtualizacao)).getTime()
+        response.set('Last-Modified', timestamp)
+        // Como já estamos visualizando os detalhes não precisamos colocar o location
         response.send(
             serializador.serializar(produto)
         )
@@ -87,6 +98,11 @@ roteador.put('/:id', async(request, response, proximo) => {
         const produto = new Produto(dados)
         await produto.atualizar()
 
+        await produto.carregar()
+        // Chamamos o método carregar para atualizar a data de atualização e versão
+        response.set('ETag', produto.versao)
+        const timestamp = (new Date(produto.dataAtualizacao)).getTime()
+        response.set('Last-Modified', timestamp)
         response.status(204)
         response.end()
     } catch(erro) {
@@ -107,6 +123,10 @@ roteador.post('/:id/diminuir-estoque', async(request, response, proximo) => {
         produto.estoque = produto.estoque - request.body.quantidade
         await produto.diminuirEstoque()
 
+        await produto.carregar()
+        response.set('ETag', produto.versao)
+        const timestamp = (new Date(produto.dataAtualizacao)).getTime()
+        response.set('Last-Modified', timestamp)
         response.status(204)
         response.end()
     } catch(erro) {
