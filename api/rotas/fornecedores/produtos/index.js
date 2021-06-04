@@ -5,6 +5,13 @@ const Tabela = require('./TabelaProduto')
 const Produto = require('./Produto')
 const Serializador = require('../../../Serializador').SerializadorProduto
 
+roteador.options('/', (request, response) => {
+    response.set('Access-Control-Allow-Methods', 'GET, POST')
+    response.set('Access-Control-Allow-Headers', 'Content-Type')
+    response.status(204)
+    response.end()
+})
+
 roteador.get('/', async (request, response) => {
     const produtos = await Tabela.listar(request.fornecedor.id)
     const serializador = new Serializador(
@@ -41,6 +48,13 @@ roteador.post('/', async (request, response, proximo) => {
     } catch (erro) {
         proximo(erro)
     }
+})
+
+roteador.options('/:id', (request, response) => {
+    response.set('Access-Control-Allow-Methods', 'GET, DELETE, HEAD, PUT')
+    response.set('Access-Control-Allow-Headers', 'Content-Type')
+    response.status(204)
+    response.end()
 })
 
 roteador.delete('/:id', async (request, response) => {
@@ -130,6 +144,14 @@ roteador.put('/:id', async(request, response, proximo) => {
     }
 })
 
+roteador.options('/:id/diminuir-estoque', (request, response) => {
+    response.set('Access-Control-Allow-Methods', 'POST')
+    response.set('Access-Control-Allow-Headers', 'Content-Type')
+    response.status(204)
+    response.end()
+})
+
+// Controller
 // Para adicionar um comportamento à nossa API, usaremos o método POST
 // Criamos a rota com o verbo da ação do comportamento
 roteador.post('/:id/diminuir-estoque', async(request, response, proximo) => {
