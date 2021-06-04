@@ -39,6 +39,9 @@ app.use((request, response, proximo) => {
 const roteador = require('./rotas/fornecedores')
 app.use('/api/fornecedores', roteador)
 
+const roteadorV2 = require('./rotas/fornecedores/rotasv2')
+app.use('/api/v2/fornecedores', roteadorV2)
+
 app.use((erro, request, response, proximo) => {
 // erro, parametros da requisição e declaracao do middleware
 
